@@ -32,7 +32,7 @@ function connect() {
 
     document.getElementById("connect").disabled = true
 
-    const protocol = location.protocol == 'https:' ? 'ws' : 'ws';
+    const protocol = location.protocol == 'https:' ? 'wss' : 'ws';
     const server = "localhost"
     const port = 443
 
