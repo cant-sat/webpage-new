@@ -1,6 +1,6 @@
 socket = null
 
-const protocol = "ws";
+const protocol = "wss";
 const server = "192.168.3.61"
 const port = 443
 
@@ -18,7 +18,7 @@ function connect() {
     document.getElementById("graph").hidden = true
 
     // Connect to Server
-    socket = new WebSocket(`${protocol}://${server}:${port}`, ["ws", "wss"])
+    socket = new WebSocket(`${protocol}://${server}:${port}`, ["wss"])
 
     socket.addEventListener("error", function (event) {
         console.log(event.data)
