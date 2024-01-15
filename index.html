@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="index.css">
+</head>
+
+<body>
+	<div class="topnav" id="myTopnav">
+		<a href="#about" onclick="closeHamburger()" class="active">About</a>
+		<a href="#projects" onClick="closeHamburger()">Projects</a>
+		<a href="#contact" onclick="closeHamburger()">Contact</a>
+		<a href="javascript:void(0);" class="icon" onclick="toggleMobileMenu()">
+			<i class="fa fa-bars"></i>
+		</a>
+	</div>
+
+	<!-- Content container -->
+	<div id="content"></div>
+</body>
+
+<!-- Scripts -->
+<script src="index.js"></script>
+
+</html>
