@@ -32,12 +32,12 @@ function connect() {
 
     document.getElementById("connect").disabled = true
 
-    const protocol = location.protocol == 'https:' ? 'wss' : 'ws';
+    const protocol = 'ws' || location.protocol == 'https:' ? 'wss' : 'ws';
     const server = "localhost"
     const port = 443
 
     // Connect to Server
-    socket = new WebSocket(`${protocol}://${server}:${port}`, ["wss"])
+    socket = new WebSocket(`${protocol}://${server}:${port}`, ["ws", "wss"])
 
     socket.addEventListener("error", function (event) {
         console.error('WebSocket error:', event);
