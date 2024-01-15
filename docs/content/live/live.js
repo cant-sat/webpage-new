@@ -32,109 +32,88 @@ function connect() {
 
     document.getElementById("connect").disabled = true
 
-    const protocol = location.protocol == 'https:' ? 'wss' : 'ws';
+    const protocol = "ws";
     const server = "localhost"
     const port = 443
 
     // Connect to Server
     socket = new WebSocket(`${protocol}://${server}:${port}`, ["ws", "wss"])
 
+    // onError
     socket.addEventListener("error", function (event) {
-        console.error('WebSocket error:', event);
-    });
+        console.log(event.data)
+    })
 
+    // onClose
     socket.addEventListener("close", function (event) {
-        console.log("WebSocket connection closed");
+        console.log("closed")
 
-        document.getElementById("connect").disabled = false;
-        document.getElementById("connect").hidden = false;
-    });
+        // enables the connect buttons
+        //document.getElementById("url").disabled = false
+        document.getElementById("connect").disabled = false
 
+
+        //document.getElementById("url").hidden = false
+        document.getElementById("connect").hidden = false
+
+        // document.getElementById("table").disabled = true
+        // document.getElementById("show").disabled = true
+    })
+
+    // onMessage
     socket.addEventListener("message", function (event) {
-        console.log('Received message:', event.data);
-        // Your message handling logic
-    });
+        console.log(event.data)
 
-    socket.addEventListener("open", function () {
-        document.getElementById("connect").hidden = true;
-        console.log(`Successfully joined using ${socket.protocol} protocol`);
-    });
+        var newEntrie = JSON.parse(event.data)
 
-    // // onError
-    // socket.addEventListener("error", function (event) {
-    //     console.log(event.data)
-    // })
+        // if the thing being sent is real life data
+        if (newEntrie.entries != undefined && newEntrie.entries != null && newEntrie.values == undefined) {
 
-    // // onClose
-    // socket.addEventListener("close", function (event) {
-    //     console.log("closed")
+            newEntrie.entries.forEach((entrie) => {
+                if (typeof entrie.values[0] != typeof 1) {
+                    throw "error: only numbers are accepted"
+                    return
+                }
 
-    //     // enables the connect buttons
-    //     //document.getElementById("url").disabled = false
-    //     document.getElementById("connect").disabled = false
+                if (tables.has(entrie.table)) {
+                    // adds the new entrie to the table if it exists
+                    console.log("added entrie to table: " + entrie.table)
+                    tables.set(entrie.table, tables.get(entrie.table).concat(entrie.values))
+                }
+                else {
+                    // creates the table if it exists
+                    console.log("created new table: " + entrie.table)
+                    tables.set(entrie.table, entrie.values)
 
+                    // adds the new table to visualize to the current graphs
+                    colors.set(entrie.table, "rgb(" + Math.floor((Math.random() * 255)) + ", " + Math.floor((Math.random() * 255)) + ", " + Math.floor((Math.random() * 255)) + ")")
+                    currentGraphs.push(entrie.table)
 
-    //     //document.getElementById("url").hidden = false
-    //     document.getElementById("connect").hidden = false
+                    //updates the graphs
+                    updateGraph()
+                }
+            })
 
-    //     // document.getElementById("table").disabled = true
-    //     // document.getElementById("show").disabled = true
-    // })
+            updateGraph()
+        }
+        else {
+            throw "error, bad message"
+        }
+    })
 
-    // // onMessage
-    // socket.addEventListener("message", function (event) {
-    //     console.log(event.data)
+    socket.addEventListener("open", function (event) {
+        // document.getElementById("table").disabled = false
+        // document.getElementById("show").disabled = false
 
-    //     var newEntrie = JSON.parse(event.data)
-
-    //     // if the thing being sent is real life data
-    //     if (newEntrie.entries != undefined && newEntrie.entries != null && newEntrie.values == undefined) {
-
-    //         newEntrie.entries.forEach((entrie) => {
-    //             if (typeof entrie.values[0] != typeof 1) {
-    //                 throw "error: only numbers are accepted"
-    //                 return
-    //             }
-
-    //             if (tables.has(entrie.table)) {
-    //                 // adds the new entrie to the table if it exists
-    //                 console.log("added entrie to table: " + entrie.table)
-    //                 tables.set(entrie.table, tables.get(entrie.table).concat(entrie.values))
-    //             }
-    //             else {
-    //                 // creates the table if it exists
-    //                 console.log("created new table: " + entrie.table)
-    //                 tables.set(entrie.table, entrie.values)
-
-    //                 // adds the new table to visualize to the current graphs
-    //                 colors.set(entrie.table, "rgb(" + Math.floor((Math.random() * 255)) + ", " + Math.floor((Math.random() * 255)) + ", " + Math.floor((Math.random() * 255)) + ")")
-    //                 currentGraphs.push(entrie.table)
-
-    //                 //updates the graphs
-    //                 updateGraph()
-    //             }
-    //         })
-
-    //         updateGraph()
-    //     }
-    //     else {
-    //         throw "error, bad message"
-    //     }
-    // })
-
-    // socket.addEventListener("open", function () {
-    //     // document.getElementById("table").disabled = false
-    //     // document.getElementById("show").disabled = false
-
-    //     // uncomment these to enable the show table button and text field
+        // uncomment these to enable the show table button and text field
 
 
-    //     // enables the connect buttons
-    //     //document.getElementById("url").hidden = true
-    //     document.getElementById("connect").hidden = true
+        // enables the connect buttons
+        //document.getElementById("url").hidden = true
+        document.getElementById("connect").hidden = true
 
-    //     console.log("Succesfully joined")
-    // })
+        console.log(`Succesfully joined using ${event.protocol} protocol`)
+    })
 }
 
 function showTable(tableName) {
