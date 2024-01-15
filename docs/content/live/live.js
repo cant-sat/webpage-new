@@ -112,7 +112,7 @@ function connect() {
         //document.getElementById("url").hidden = true
         document.getElementById("connect").hidden = true
 
-        console.log(`Succesfully joined using ${event.protocol} protocol`)
+        console.log(`Succesfully joined using ${socket.protocol} protocol`)
     })
 }
 
