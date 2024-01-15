@@ -21,10 +21,6 @@ var graph = new Chart(document.getElementById("graph"), config)
 var currentGraphs = []
 
 function connect() {
-    const protocol = location.protocol == 'https:' ? 'wss' : 'ws';
-    const server = "localhost"
-    const port = 443
-
     // graph.destroy()
     // graph = new Chart(document.getElementById("graph"), config)
     // currentGraphs = []
@@ -36,84 +32,109 @@ function connect() {
 
     document.getElementById("connect").disabled = true
 
-    // Connect to Server (protocol://server:port)
-    socket = new WebSocket(protocol + "://" + server + ":" + port)
+    const protocol = location.protocol == 'https:' ? 'wss' : 'ws';
+    const server = "localhost"
+    const port = 443
 
-    // onError
+    // Connect to Server
+    socket = new WebSocket(`${protocol}://${server}:${port}`, ["wss"])
+
     socket.addEventListener("error", function (event) {
-        console.log(event.data)
-    })
+        console.error('WebSocket error:', event);
+    });
 
-    // onClose
     socket.addEventListener("close", function (event) {
-        console.log("closed")
+        console.log("WebSocket connection closed");
 
-        // enables the connect buttons
-        //document.getElementById("url").disabled = false
-        document.getElementById("connect").disabled = false
+        document.getElementById("connect").disabled = false;
+        document.getElementById("connect").hidden = false;
+    });
 
-
-        //document.getElementById("url").hidden = false
-        document.getElementById("connect").hidden = false
-
-        // document.getElementById("table").disabled = true
-        // document.getElementById("show").disabled = true
-    })
-
-    // onMessage
     socket.addEventListener("message", function (event) {
-        console.log(event.data)
-
-        var newEntrie = JSON.parse(event.data)
-
-        // if the thing being sent is real life data
-        if (newEntrie.entries != undefined && newEntrie.entries != null && newEntrie.values == undefined) {
-
-            newEntrie.entries.forEach((entrie) => {
-                if (typeof entrie.values[0] != typeof 1) {
-                    throw "error: only numbers are accepted"
-                    return
-                }
-
-                if (tables.has(entrie.table)) {
-                    // adds the new entrie to the table if it exists
-                    console.log("added entrie to table: " + entrie.table)
-                    tables.set(entrie.table, tables.get(entrie.table).concat(entrie.values))
-                }
-                else {
-                    // creates the table if it exists
-                    console.log("created new table: " + entrie.table)
-                    tables.set(entrie.table, entrie.values)
-
-                    // adds the new table to visualize to the current graphs
-                    colors.set(entrie.table, "rgb(" + Math.floor((Math.random() * 255)) + ", " + Math.floor((Math.random() * 255)) + ", " + Math.floor((Math.random() * 255)) + ")")
-                    currentGraphs.push(entrie.table)
-
-                    //updates the graphs
-                    updateGraph()
-                }
-            })
-
-            updateGraph()
-        }
-        else {
-            throw "error, bad message"
-        }
-    })
+        console.log('Received message:', event.data);
+        // Your message handling logic
+    });
 
     socket.addEventListener("open", function () {
-        // document.getElementById("table").disabled = false
-        // document.getElementById("show").disabled = false
+        document.getElementById("connect").hidden = true;
+        console.log(`Successfully joined using ${socket.protocol} protocol`);
+    });
 
-        // uncomment these to enable the show table button and text field
+    // // onError
+    // socket.addEventListener("error", function (event) {
+    //     console.log(event.data)
+    // })
+
+    // // onClose
+    // socket.addEventListener("close", function (event) {
+    //     console.log("closed")
+
+    //     // enables the connect buttons
+    //     //document.getElementById("url").disabled = false
+    //     document.getElementById("connect").disabled = false
 
 
-        // enables the connect buttons
-        //document.getElementById("url").hidden = true
-        document.getElementById("connect").hidden = true
+    //     //document.getElementById("url").hidden = false
+    //     document.getElementById("connect").hidden = false
 
-        console.log("Succesfully joined")
-    })
+    //     // document.getElementById("table").disabled = true
+    //     // document.getElementById("show").disabled = true
+    // })
+
+    // // onMessage
+    // socket.addEventListener("message", function (event) {
+    //     console.log(event.data)
+
+    //     var newEntrie = JSON.parse(event.data)
+
+    //     // if the thing being sent is real life data
+    //     if (newEntrie.entries != undefined && newEntrie.entries != null && newEntrie.values == undefined) {
+
+    //         newEntrie.entries.forEach((entrie) => {
+    //             if (typeof entrie.values[0] != typeof 1) {
+    //                 throw "error: only numbers are accepted"
+    //                 return
+    //             }
+
+    //             if (tables.has(entrie.table)) {
+    //                 // adds the new entrie to the table if it exists
+    //                 console.log("added entrie to table: " + entrie.table)
+    //                 tables.set(entrie.table, tables.get(entrie.table).concat(entrie.values))
+    //             }
+    //             else {
+    //                 // creates the table if it exists
+    //                 console.log("created new table: " + entrie.table)
+    //                 tables.set(entrie.table, entrie.values)
+
+    //                 // adds the new table to visualize to the current graphs
+    //                 colors.set(entrie.table, "rgb(" + Math.floor((Math.random() * 255)) + ", " + Math.floor((Math.random() * 255)) + ", " + Math.floor((Math.random() * 255)) + ")")
+    //                 currentGraphs.push(entrie.table)
+
+    //                 //updates the graphs
+    //                 updateGraph()
+    //             }
+    //         })
+
+    //         updateGraph()
+    //     }
+    //     else {
+    //         throw "error, bad message"
+    //     }
+    // })
+
+    // socket.addEventListener("open", function () {
+    //     // document.getElementById("table").disabled = false
+    //     // document.getElementById("show").disabled = false
+
+    //     // uncomment these to enable the show table button and text field
+
+
+    //     // enables the connect buttons
+    //     //document.getElementById("url").hidden = true
+    //     document.getElementById("connect").hidden = true
+
+    //     console.log("Succesfully joined")
+    // })
 }
 
 function showTable(tableName) {
