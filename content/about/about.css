@@ -1,0 +1,174 @@
+:root {
+    --black-color: #1d1d1d;
+    --red-color: #A30900;
+    --grey-color: #8A8A8A;
+    --white-color: #E2E2E2;
+    --blue-color: #256A6F;
+    --transition-in: cubic-bezier(0, 0, 0, 1);
+    --transition-out: cubic-bezier(1, 0, 1, 1);
+}
+
+/* tagok kártyái*/
+
+.card-container {
+    display: flex;
+    height: auto;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+/* centers and makes the names of everyone bigger*/
+.member {
+    text-align: center;
+    display: block;
+    font-size: 150%;
+    margin-bottom: 30px;
+}
+
+.card-content {
+    /* margin between content and side*/
+    display: block;
+    margin: 10px;
+    height: calc(100% - (10px) * 2);
+    font-size: 100%;
+}
+
+.card {
+    flex-basis: calc(25% - 3vh);
+    margin: 1vh;
+    background-color: var(--red-color);
+    aspect-ratio: 2/3;
+
+    color: var(--white-color);
+
+    border-radius: 1.5vh;
+
+    transition: all 0.5s;
+}
+
+
+
+@media (any-pointer: fine) {
+    .card-container:hover>*:not(:hover) {
+        transform: scale(0.96);
+        filter: blur(10px);
+    }
+}
+
+
+@media (max-width: 768px) {
+    .card {
+        flex-basis: calc(50% - 3vh);
+        /* Two cards per row on smaller screens */
+    }
+}
+
+@media (max-width: 480px) {
+    h#mentor {
+        font-size: 180%;
+    }
+
+    .card {
+        flex-basis: calc(100% - 3vh);
+        /* One card per row on even smaller screens */
+    }
+}
+
+/* mentorok kártyái*/
+.flip-container {
+    display: flex;
+    height: auto;
+    flex-wrap: wrap;
+    justify-content: center;
+
+    margin: 0;
+}
+
+.flip {
+    display: block;
+
+    flex-basis: 50vh;
+    min-width: 40vh;
+    height: 50vh;
+    margin: 10vh;
+    background-color: var(--red-color);
+    color: var(--white-color);
+    border-radius: 1.5vh;
+    transition: all ease-in-out 0.2s;
+
+    text-align: center;
+}
+
+.flip-content {
+    margin: 10px;
+    font-size: 130%;
+    height: calc(100% - 20px);
+
+    transition: all 0.5s;
+}
+
+.name {
+    transition: all var(--transition-in) 0.3s;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    height: calc(100% - 20px);
+
+    width: 100%;
+
+    overflow: visible;
+}
+
+h {
+    text-align: center;
+    display: block;
+    width: 100%;
+    margin: 25px 0;
+    font-size: 220%;
+
+
+}
+
+.description {
+    height: 0%;
+    font-size: 0px;
+    opacity: 0px;
+    transform: scale(0) translateY(0);
+
+    overflow: visible;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    transition: all var(--transition-out) 0.5s;
+
+    width: 100%;
+
+}
+
+.flip:hover .name {
+    opacity: 0;
+    height: 0%;
+    font-size: 0px;
+
+    transform: scale(0) translateY(-200%);
+
+    transition-timing-function: var(--transition-out);
+}
+
+.flip:hover .description {
+    opacity: 1;
+    font-size: 150%;
+    height: calc(100% - 20px);
+
+    transform: scale(1) translateY(0);
+
+    transition-timing-function: var(--transition-in);
+}
+
+.flip:hover {
+    transform: scale(1.1);
+}

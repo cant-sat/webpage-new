@@ -22,7 +22,7 @@ function loadPage(container, page) {
         .then(response => {
             if (!response.ok) {
                 if (response.status === 404) {
-                    loadPage(container, "content/404.html")
+                    loadPage(container, "404.html")
                 } else {
                     throw new Error('Error loading content: ' + response.status);
                 }
