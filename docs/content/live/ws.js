@@ -18,7 +18,7 @@ function connect() {
     document.getElementById("graph").hidden = true
 
     // Connect to Server
-    socket = new WebSocket(`${protocol}://${server}:${port}`, ["wss"])
+    socket = new WebSocket(`${protocol}://${server}:${port}`)
 
     socket.addEventListener("error", function (event) {
         console.log(event.data)
