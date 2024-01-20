@@ -1,7 +1,7 @@
 socket = null
 
 const protocol = "wss";
-const server = "192.168.3.61"
+const server = "server.cant.hu"
 const port = 443
 
 function connect() {
